@@ -1,0 +1,50 @@
+version: '3'
+services:
+  go:
+    image: auto-generate-golang-image
+    container_name: auto-generate-golang-container
+    build:
+      context: .
+      dockerfile: container/golang/Dockerfile
+    command: ${GOLANG_COMMAND}
+    stdin_open: true
+    tty: true
+    working_dir: /app
+    volumes:
+      - ./src:/app
+    environment:
+      TZ: Asia/Tokyo
+    env_file:
+      - .env
+    ports:
+      - ${GOLANG_PORT}
+      - ${AIR_TOML_PORT}
+  db:
+    image: mysql:5.7
+    container_name: auto-generate-golang # phpMyAdminサービスのPMA_HOSTSに設定する
+    environment:
+      MYSQL_ROOT_PASSWORD: ${ROOTPASS}
+      MYSQL_DATABASE: ${DATABASE}
+      MYSQL_USER: ${USERNAME}
+      MYSQL_PASSWORD: ${USERPASS}
+      TZ: 'Asia/Tokyo'
+      LC_ALL: 'ja_JP.UTF-8'
+      LANG: "ja_JP.UTF-8"
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - ./container/db/data:/var/lib/mysql
+      - ./container/db/my.cnf:/etc/mysql/conf.d/my.cnf
+    ports:
+      - "3306:3306"
+
+  # phpMyAdmin
+  phpmyadmin:
+    container_name: auto-generate-golang-phpmyadmin
+    image: phpmyadmin/phpmyadmin
+    environment:
+      - PMA_ARBITRARY=1
+      - PMA_HOSTS=auto-generate-golang
+      - PMA_USER=root
+      - PMA_PASSWORD=${ROOTPASS}
+    ports:
+      - "8080:80"

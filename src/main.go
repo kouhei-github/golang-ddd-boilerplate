@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/kouhei-github/golang-ddd-boboilerplate/config"
+	"github.com/kouhei-github/golang-ddd-boboilerplate/di"
 	"github.com/kouhei-github/golang-ddd-boboilerplate/provider"
 )
 
@@ -17,15 +18,13 @@ func main() {
 	}
 
 	app := fiber.New()
-	app.Get("/", helloHandler)
+
+	group := app.Group("")
+	r := di.NewRouter(*db)
+	r.Register(group)
+
 	if err := app.Listen(":8888"); err != nil {
 		panic(err)
 	}
 
-}
-
-func helloHandler(c *fiber.Ctx) error {
-	res := c.Response()
-	res.Header.SetStatusCode(fiber.StatusOK)
-	return c.SendString("Hello, World 👋!")
 }

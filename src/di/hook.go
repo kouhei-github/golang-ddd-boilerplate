@@ -7,6 +7,7 @@
 package di
 
 import (
+	"github.com/gofiber/fiber/v2"
 	"github.com/kouhei-github/golang-ddd-boboilerplate/handler"
 	"github.com/kouhei-github/golang-ddd-boboilerplate/repository"
 	"github.com/kouhei-github/golang-ddd-boboilerplate/router"
@@ -14,7 +15,11 @@ import (
 	"gorm.io/gorm"
 )
 
-func NewRouter(db gorm.DB) router.Router {
+type Router interface {
+	Register(c fiber.Router)
+}
+
+func NewRouter(db gorm.DB) Router {
 	hellowWorld := repository.NewHelloWorldRepository(db)
 	helloWorldService := service.NewHelloWorldService(hellowWorld)
 	helloWorldHandler := handler.NewHelloWorldHandler(helloWorldService)

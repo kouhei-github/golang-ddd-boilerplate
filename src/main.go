@@ -13,6 +13,7 @@ func main() {
 
 	database := provider.NewDatabaseProvider()
 	db, _, _ := database.Connect()
+	//db.AutoMigrate(&models.User{}) // auto migrationできる
 	if db == nil {
 		panic("db is nil.")
 	}

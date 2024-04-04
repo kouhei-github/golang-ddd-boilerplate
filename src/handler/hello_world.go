@@ -3,28 +3,28 @@ package handler
 import (
 	"fmt"
 	"github.com/gofiber/fiber/v2"
-	"github.com/kouhei-github/golang-ddd-boboilerplate/service"
 	"strconv"
 	"strings"
 )
 
-type HelloWorldHandler interface {
-	HelloWorld(c *fiber.Ctx) error
+type IHelloWorldService interface {
+	HelloMessage(id int) string
+	WorldMessage(id int, userID int) string
 }
 
-type helloWorld struct {
-	serviceHelloWorld service.HelloWorldService
+type HelloWorldHandler struct {
+	serviceHelloWorld IHelloWorldService
 }
 
 func NewHelloWorldHandler(
-	serviceHelloWorld service.HelloWorldService,
-) HelloWorldHandler {
-	return &helloWorld{
+	serviceHelloWorld IHelloWorldService,
+) *HelloWorldHandler {
+	return &HelloWorldHandler{
 		serviceHelloWorld: serviceHelloWorld,
 	}
 }
 
-func (h *helloWorld) HelloWorld(c *fiber.Ctx) error {
+func (h *HelloWorldHandler) HelloWorld(c *fiber.Ctx) error {
 	query := c.Query("id")
 	userId, err := strconv.Atoi(query)
 	if err != nil {

@@ -4,27 +4,22 @@ import (
 	"gorm.io/gorm"
 )
 
-type HelloWorld interface {
-	GetHello(id int) (string, error)
-	GetWorld() string
-}
-
-type helloWorld struct {
+type HelloWorld struct {
 	db gorm.DB
 }
 
-func NewHelloWorldRepository(db gorm.DB) HelloWorld {
-	return &helloWorld{
+func NewHelloWorldRepository(db gorm.DB) *HelloWorld {
+	return &HelloWorld{
 		db: db,
 	}
 }
 
-func (c *helloWorld) GetHello(id int) (string, error) {
+func (c *HelloWorld) GetHello(id int) (string, error) {
 	hello := "World"
 	return hello, nil
 }
 
-func (c *helloWorld) GetWorld() string {
+func (c *HelloWorld) GetWorld() string {
 	world := "World"
 	return world
 }

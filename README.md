@@ -21,8 +21,8 @@ type MyStore struct {
 }
 
 func NewStore() Store { ... } //func to initialise DB
-func (s *Store) Insert(item interface{}) error { ... } //insert item
-func (s *Store) Get(id int) error { ... } //get item by id
+func (s *MyStore) Insert(item interface{}) error { ... } //insert item
+func (s *MyStore) Get(id int) error { ... } //get item by id
 ```
 user.go
 ```go

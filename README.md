@@ -125,6 +125,31 @@ make migrate_up
 make migrate_down
 ```
 
+## Golangの構造体からSQLを作成してもらう
+```text
+golangでGORMを使用しています。 下記構造体でテーブルを作成したいです。 SQL文を書いてください
+
+
+type User struct {
+	ID       int    `gorm:"primaryKey" json:"id"`
+	UserName string `json:"user_name"`
+	Email    string `gorm:"not null" gorm:"unique" json:"email"`
+	Password string `gorm:"not null" json:"password"`
+	Image    string `json:"image"`
+	UserAuth UserAuth
+}
+
+type UserAuth struct {
+	ID           int    `gorm:"primaryKey" json:"id"`
+	PasswordHash string `json:"-"`
+	PasswordSalt string `json:"password_salt"`
+	UserID       int    `json:"user_id"`
+}
+
+
+databaseのマイグレーションにはgolang-migrateを使用しています。
+up.sqlとdown.sqlを作成してください
+```
 ---
 
 ## 参考文献

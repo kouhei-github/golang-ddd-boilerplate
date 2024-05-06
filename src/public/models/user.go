@@ -6,16 +6,15 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt"
-	"gorm.io/gorm"
 )
 
 type User struct {
-	ID        int     `gorm:"primaryKey" json:"id"`
-	UserName  string  `json:"name"`
-	Email     string  `json:"email"`
-	AvatarURL *string `json:"avatar_url"`
-	UserAuth  UserAuth
-	DeletedAt gorm.DeletedAt `json:"deleted_at"`
+	ID       int    `gorm:"primaryKey" json:"id"`
+	UserName string `json:"user_name"`
+	Email    string `gorm:"not null" gorm:"unique" json:"email"`
+	Password string `gorm:"not null" json:"password"`
+	Image    string `json:"image"`
+	UserAuth UserAuth
 }
 
 type UserAuth struct {

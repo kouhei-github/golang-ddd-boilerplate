@@ -2,25 +2,26 @@ package routers
 
 import (
 	"github.com/gofiber/fiber/v2"
+	"github.com/kouhei-github/golang-ddd-boboilerplate/handlers"
 )
 
-type IHelloWorldHandler interface {
-	HelloWorld(c *fiber.Ctx) error
+type Router interface {
+	Register(c fiber.Router)
 }
 
-type Router struct {
-	helloWorld IHelloWorldHandler
+type router struct {
+	login handlers.LoginHandler
 }
 
-func NewRouter(
-	helloWorld IHelloWorldHandler,
-) *Router {
-	return &Router{
-		helloWorld: helloWorld,
+func NewRouter(login handlers.LoginHandler) Router {
+	return &router{
+		login: login,
 	}
 }
 
-func (r *Router) Register(c fiber.Router) {
-	common := c.Group("/api")
-	common.Get("/test", r.helloWorld.HelloWorld)
+func (r *router) Register(c fiber.Router) {
+	common := c.Group("/v1")
+	common.Post("/login", r.login.Login)
+	common.Post("/refresh", r.login.RefreshToken)
+	common.Post("/signup", r.login.SignUp)
 }

@@ -20,10 +20,9 @@ func main() {
 
 	app := fiber.New()
 
-	group := app.Group("")
+	group := app.Group("/api")
 	r := di.NewRouter(*db)
 	r.Register(group)
-
 	if err := app.Listen(":8888"); err != nil {
 		panic(err)
 	}

@@ -100,7 +100,7 @@ func (h *loginHandler) SignUp(c *fiber.Ctx) error {
 	newUserAuth.SetPassword(req.Password)
 
 	if temUser, err := h.user.GetByEmail(newUser.Email); err == nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fmt.Sprintf("user already exists: %v", temUser))
+		return c.Status(fiber.StatusBadRequest).JSON(fmt.Sprintf("user already exists: %v", temUser.Email))
 	}
 
 	newUser.UserAuth = newUserAuth

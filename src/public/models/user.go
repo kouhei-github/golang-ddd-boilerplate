@@ -2,7 +2,7 @@ package models
 
 import (
 	"fmt"
-	"github.com/kouhei-github/golang-ddd-boboilerplate/config"
+	config2 "github.com/kouhei-github/golang-ddd-boboilerplate/config"
 	"time"
 
 	"github.com/golang-jwt/jwt"
@@ -27,14 +27,14 @@ type UserAuth struct {
 
 func (u *UserAuth) SetPassword(password string) {
 	saltLength := 16
-	salt, _ := config.GenerateSalt(saltLength)
+	salt, _ := config2.GenerateSalt(saltLength)
 	u.PasswordSalt = salt
-	hash, _ := config.HashPassword(password, []byte(salt))
+	hash, _ := config2.HashPassword(password, []byte(salt))
 	u.PasswordHash = hash
 }
 
 func (u *UserAuth) CheckPassword(password string) bool {
-	return config.ComparePasswords(u.PasswordHash, password, []byte(u.PasswordSalt))
+	return config2.ComparePasswords(u.PasswordHash, password, []byte(u.PasswordSalt))
 }
 
 type jwtCustomClaims struct {
@@ -50,7 +50,7 @@ type UserClaim struct {
 
 func (u *User) GenerateToken(expiredTime time.Duration) (string, error) {
 	// Default: Standard Claim, Custom: User Clamを用いる
-	SECRET_KEY := []byte(config.JWT_SECRET_KEY)
+	SECRET_KEY := []byte(config2.JWT_SECRET_KEY)
 	claims := &jwtCustomClaims{
 		UserClaim{
 			UserID:    u.ID,

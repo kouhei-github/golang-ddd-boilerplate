@@ -103,5 +103,5 @@ fabric.properties
 
 container/db
 .env
-src/env/.env
-src/tmp/main
+src/public/env/.env
+src/public/tmp/main

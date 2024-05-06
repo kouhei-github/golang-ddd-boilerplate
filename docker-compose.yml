@@ -9,7 +9,7 @@ services:
     command: ${GOLANG_COMMAND}
     stdin_open: true
     tty: true
-    working_dir: /app
+    working_dir: /app/public
     volumes:
       - ./src:/app
     environment:
@@ -19,6 +19,8 @@ services:
     ports:
       - ${GOLANG_PORT}
       - ${AIR_TOML_PORT}
+    depends_on:
+      - db
   db:
     image: mysql:5.7
     container_name: auto-generate-golang # phpMyAdminサービスのPMA_HOSTSに設定する

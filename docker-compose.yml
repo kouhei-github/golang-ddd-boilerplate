@@ -25,10 +25,10 @@ services:
     image: mysql:5.7
     container_name: auto-generate-golang # phpMyAdminサービスのPMA_HOSTSに設定する
     environment:
-      MYSQL_ROOT_PASSWORD: ${ROOTPASS}
-      MYSQL_DATABASE: ${DATABASE}
-      MYSQL_USER: ${USERNAME}
-      MYSQL_PASSWORD: ${USERPASS}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT}
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASS}
       TZ: 'Asia/Tokyo'
       LC_ALL: 'ja_JP.UTF-8'
       LANG: "ja_JP.UTF-8"
@@ -47,6 +47,6 @@ services:
       - PMA_ARBITRARY=1
       - PMA_HOSTS=auto-generate-golang
       - PMA_USER=root
-      - PMA_PASSWORD=${ROOTPASS}
+      - PMA_PASSWORD=${DB_ROOT}
     ports:
       - "8080:80"

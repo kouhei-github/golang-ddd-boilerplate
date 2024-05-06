@@ -1,4 +1,4 @@
-# Golangの原則(インターフェースは使用する側で定義する)
+# 1. Golangの原則(インターフェースは使用する側で定義する)
 
 ### **インターフェイスを受け入れ、構造体を返す** Accept interfaces, return structs
 
@@ -100,4 +100,33 @@ func ListenAndServe(addr string, handler Handler) error
 [非常に良い: https://bryanftan.medium.com/accept-interfaces-return-structs-in-go-d4cab29a301b](https://bryanftan.medium.com/accept-interfaces-return-structs-in-go-d4cab29a301b)
 
 
+
+---
+
+# 2. DBのマイグレーションファイルについて
+Golangでmigrationを管理は、[golang-migrate](https://github.com/golang-migrate/migrate)で行う
+
+
+
+## マイグレーションファイルの作成
+コンテナ上の **/app**で下記コマンドを打つ
+```shell
+migrate create -ext sql -dir ./migrations -seq 作成するファイル名(create_users)
+```
+なぜ **/app** なのかというと、migrationsファイルをロジックを含むpublicフォルダに作成したくないから。
+
+## マイグレートの適用
+```shell
+make migrate_up
+```
+
+## マイグレートのロールバック
+```shell
+make migrate_down
+```
+
+---
+
+## 参考文献
+[hQiita: golang-migrateの導入](https://qiita.com/shuyaeer/items/3f8a93cac6dcc4323f5f)
 

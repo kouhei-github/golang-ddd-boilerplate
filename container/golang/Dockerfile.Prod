@@ -1,6 +1,11 @@
 FROM golang:1.20 as build
 
 WORKDIR /app/public
+#  Golang migrateのインストール
+RUN wget https://github.com/golang-migrate/migrate/releases/download/v4.15.0/migrate.linux-amd64.tar.gz \
+    && tar -xzf migrate.linux-amd64.tar.gz \
+    && mv migrate /usr/local/bin/migrate \
+    && rm -rf migrate.linux-amd64.tar.gz LICENSE README.md
 
 COPY ./src/public/go.mod /app/public/
 COPY ./src/public//go.sum /app/public/
@@ -9,5 +14,6 @@ COPY ./src /app
 RUN CGO_ENABLED=0 go build -o main main.go
 
 FROM golang:1.20
+COPY --from=build /usr/local/bin/migrate /usr/local/bin/migrate
 COPY --from=build /app/main ./
 CMD ./main

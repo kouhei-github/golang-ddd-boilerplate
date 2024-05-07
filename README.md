@@ -111,6 +111,7 @@ Golangでmigrationを管理は、[golang-migrate](https://github.com/golang-migr
 ## マイグレーションファイルの作成
 コンテナ上の **/app**で下記コマンドを打つ
 ```shell
+# make migrate_create name=create_table_user
 migrate create -ext sql -dir ./migrations -seq 作成するファイル名(create_users)
 ```
 なぜ **/app** なのかというと、migrationsファイルをロジックを含むpublicフォルダに作成したくないから。

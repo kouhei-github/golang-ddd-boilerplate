@@ -1,18 +1,17 @@
 ### POST request to signup
-POST http://localhost/api/v1/signup
+POST http://localhost:8080/api/v1/signup
 Content-Type: application/json
 
 {
-  "username": "test",
   "email": "test@test.com",
-  "password": "test"
+  "password": "1Test@test2"
 }
 
 ### POST request to login
-POST http://localhost/api/v1/login
+POST http://localhost:8080/api/v1/login
 Content-Type: application/json
 
 {
   "email": "test@test.com",
-  "password": "test"
+  "password": "1Test@test2"
 }

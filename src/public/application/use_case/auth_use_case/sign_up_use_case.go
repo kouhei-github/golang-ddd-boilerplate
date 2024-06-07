@@ -34,7 +34,7 @@ func (su SignUpUseCase) Execute(email, password string) error {
 		return errors.New("ユーザは既に存在します。")
 	}
 
-	newUser, err := user_models.NewUser(string(emailVo), string(passwordVo), "", "", "", "")
+	newUser, err := user_models.NewUser(emailVo, passwordVo, "", "", "", "")
 	if err != nil {
 		return err
 	}

@@ -20,12 +20,12 @@ type User struct {
 
 // NewUser は、制約に沿った値を持つ仮登録状態のユーザを作成する。
 func NewUser(
-	email string,
-	password string,
-	userName string,
-	image string,
-	passwordHash string,
-	passwordSalt string,
+	email Email,
+	password Password,
+	userName UserName,
+	image Image,
+	passwordHash PasswordHash,
+	passwordSalt PasswordSalt,
 ) (*User, error) {
 	// 識別子である userUUID を生成
 	userUUID, err := uuid.NewRandom()
@@ -35,12 +35,12 @@ func NewUser(
 	// ユーザ属性を作成
 	return &User{
 		ID:           userUUID,
-		UserName:     userName,
-		Email:        email,
-		Password:     password,
-		Image:        image,
-		PasswordHash: passwordHash,
-		PasswordSalt: passwordSalt,
+		UserName:     string(userName),
+		Email:        string(email),
+		Password:     string(password),
+		Image:        string(image),
+		PasswordHash: string(passwordHash),
+		PasswordSalt: string(passwordSalt),
 	}, nil
 }
 

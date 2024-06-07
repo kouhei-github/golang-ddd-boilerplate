@@ -106,3 +106,4 @@ container/db
 .env
 src/public/env/.env
 src/public/tmp/main
+.env.development

@@ -8,7 +8,6 @@ type User struct {
 	ID       int    `gorm:"primaryKey" json:"id"`
 	UserName string `json:"user_name"`
 	Email    string `gorm:"not null" gorm:"unique" json:"email"`
-	Password string `gorm:"not null" json:"password"`
 	Image    string `json:"image"`
 	UserAuth UserAuth
 }
@@ -24,7 +23,6 @@ func EntityUserToOrmUser(entity *user_models.User) (*User, error) {
 	newUser := &User{
 		UserName: entity.UserName,
 		Email:    entity.Email,
-		Password: entity.Password,
 		Image:    entity.Image,
 		UserAuth: UserAuth{
 			PasswordHash: entity.PasswordHash,
@@ -41,7 +39,6 @@ func OrmUserToEntityUser(newUser *User) (*user_models.User, error) {
 		ID:           newUser.ID,
 		UserName:     newUser.UserName,
 		Email:        newUser.Email,
-		Password:     newUser.Password,
 		Image:        newUser.Image,
 		PasswordHash: newUser.UserAuth.PasswordHash,
 		PasswordSalt: newUser.UserAuth.PasswordSalt,

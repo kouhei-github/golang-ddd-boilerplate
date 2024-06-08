@@ -1,25 +1,21 @@
 package user_models
 
 import (
-	"encoding/base64"
-	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
-	"math/rand"
 	"os"
 )
 
 type User struct {
-	ID           interface{}
-	UserName     UserName
-	Email        Email
-	Password     Password
-	Image        Image
-	PasswordHash PasswordHash
-	PasswordSalt PasswordSalt
+	ID       int
+	UserName UserName
+	Email    Email
+	Password Password
+	Image    Image
 }
 
 // NewUser は、制約に沿った値を持つ仮登録状態のユーザを作成する。
 func NewUser(
+	id int,
 	email Email,
 	password Password,
 	userName *UserName,
@@ -27,14 +23,9 @@ func NewUser(
 	passwordHash *PasswordHash,
 	passwordSalt *PasswordSalt,
 ) (*User, error) {
-	// 識別子である userUUID を生成
-	userUUID, err := uuid.NewRandom()
-	if err != nil {
-		return nil, err
-	}
 
 	user := User{
-		ID:       userUUID,
+		ID:       id,
 		Email:    email,
 		Password: password,
 	}
@@ -46,39 +37,18 @@ func NewUser(
 		user.Image = *image
 	}
 	if passwordHash != nil {
-		user.PasswordHash = *passwordHash
+		user.Password.Hash = *passwordHash
 	}
 	if passwordSalt != nil {
-		user.PasswordSalt = *passwordSalt
+		user.Password.Salt = *passwordSalt
 	}
 
 	// ユーザ属性を作成
 	return &user, nil
 }
 
-func (u *User) GenerateSaltPassword() {
-	saltLength := 16
-	salt, _ := u.generateSalt(saltLength)
-	newSalt, _ := NewPasswordSalt(salt)
-	u.PasswordSalt = newSalt
-	hash, _ := u.Password.HashPassword([]byte(salt))
-	newHash, _ := NewPasswordHash(hash)
-	u.PasswordHash = newHash
-}
-
 func (u *User) CheckPassword(password string) bool {
-	return u.ComparePasswords(string(u.PasswordHash), password, []byte(u.PasswordSalt))
-}
-
-func (u *User) generateSalt(length int) (string, error) {
-	saltBytes := make([]byte, length)
-	_, err := rand.Read(saltBytes)
-	if err != nil {
-		return "", err
-	}
-
-	salt := base64.URLEncoding.EncodeToString(saltBytes)
-	return salt, nil
+	return u.ComparePasswords(string(u.Password.Hash), password, []byte(u.Password.Salt))
 }
 
 func (p *User) ComparePasswords(hashedPassword, password string, salt []byte) bool {

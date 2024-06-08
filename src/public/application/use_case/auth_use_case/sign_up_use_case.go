@@ -35,14 +35,9 @@ func (su SignUpUseCase) Execute(email, password string) error {
 		return errors.New("ユーザは既に存在します。")
 	}
 
-	newUser, err := user_models.NewUser(emailVo, passwordVo, nil, nil, nil, nil)
-	if err != nil {
-		return err
-	}
+	passwordVo.GenerateSaltPassword()
 
-	newUser.GenerateSaltPassword()
-
-	if err := su.ur.Create(newUser); err != nil {
+	if err := su.ur.Create(emailVo, *passwordVo); err != nil {
 		return err
 	}
 

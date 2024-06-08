@@ -71,15 +71,17 @@ func (u *user) GetUserAuthByID(id int) (*user_models.User, error) {
 //	return nil
 //}
 
-func (u *user) Create(entUser *user_models.User) error {
+func (u *user) Create(email user_models.Email, password user_models.Password) error {
 	// entityからORMに変換
-	userOrm, err := dto.ToOrmUser(entUser)
-	if err != nil {
-		return err
-	}
+	userOrm := dto.User{
+		Email: string(email),
+		UserAuth: dto.UserAuth{
+			PasswordSalt: string(password.Salt),
+			PasswordHash: string(password.Hash),
+		}}
 
 	// 保存する
-	if err = u.db.Create(userOrm).Error; err != nil {
+	if err := u.db.Create(&userOrm).Error; err != nil {
 		return err
 	}
 

@@ -42,27 +42,27 @@ func (lu LoginUseCase) Execute(email, password string) (*LoginResponse, error) {
 		return nil, err
 	}
 
-	authUser, err := lu.ur.GetUserAuthByID(user.ID.(int))
+	authUser, err := lu.ur.GetUserAuthByID(user.ID)
 	if err != nil {
 		return nil, err
 	}
-	if !authUser.CheckPassword(string(passwordVo)) {
+	if !authUser.CheckPassword(passwordVo.Native) {
 		return nil, errors.New("パスワードが一致しません。")
 	}
 
 	// Create token
-	accessToken, err := lu.jte.GenerateToken(AccessTokenExpires, user.ID.(int), string(user.UserName), string(user.Email))
+	accessToken, err := lu.jte.GenerateToken(AccessTokenExpires, user.ID, string(user.UserName), string(user.Email))
 	if err != nil {
 		return nil, err
 	}
 
-	refreshToken, err := lu.jte.GenerateToken(RefreshTokenExpires, user.ID.(int), string(user.UserName), string(user.Email))
+	refreshToken, err := lu.jte.GenerateToken(RefreshTokenExpires, user.ID, string(user.UserName), string(user.Email))
 	if err != nil {
 		return nil, err
 	}
 
 	return &LoginResponse{
-		UserId:             user.ID.(int),
+		UserId:             user.ID,
 		Token:              accessToken,
 		AccessTokenExpires: int(AccessTokenExpires.Seconds()),
 		RefreshToken:       refreshToken,

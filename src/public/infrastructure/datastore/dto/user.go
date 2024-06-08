@@ -25,8 +25,8 @@ func ToOrmUser(entity *user_models.User) (*User, error) {
 		Email:    string(entity.Email),
 		Image:    string(entity.Image),
 		UserAuth: UserAuth{
-			PasswordHash: string(entity.PasswordHash),
-			PasswordSalt: string(entity.PasswordSalt),
+			PasswordHash: string(entity.Password.Hash),
+			PasswordSalt: string(entity.Password.Salt),
 		},
 	}
 
@@ -67,7 +67,7 @@ func ToEntityUser(newUser *User) (*user_models.User, error) {
 		if err != nil {
 			return nil, err
 		}
-		entityUser.PasswordSalt = passwordSalt
+		entityUser.Password.Salt = passwordSalt
 	}
 
 	if newUser.UserAuth.PasswordHash != "" {
@@ -75,7 +75,7 @@ func ToEntityUser(newUser *User) (*user_models.User, error) {
 		if err != nil {
 			return nil, err
 		}
-		entityUser.PasswordHash = passwordHash
+		entityUser.Password.Hash = passwordHash
 	}
 
 	return &entityUser, nil

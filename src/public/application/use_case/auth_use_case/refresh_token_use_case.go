@@ -59,7 +59,7 @@ func (ru RefreshTokenUseCase) Execute(refreshToken string) (*Response, error) {
 	}
 
 	res := Response{
-		UserId:             user.ID.(int),
+		UserId:             user.ID,
 		Token:              accessToken,
 		AccessTokenExpires: int(AccessTokenExpires.Seconds()),
 		RefreshToken:       refreshToken,

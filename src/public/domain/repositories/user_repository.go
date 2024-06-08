@@ -9,7 +9,7 @@ type UserRepository interface {
 	GetByEmail(email string) (*user_models.User, error)
 	GetUserAuthByID(id int) (*user_models.User, error)
 	//UpdateUserAuth(userAuth *models.UserAuth) error
-	Create(u *user_models.User) error
+	Create(email user_models.Email, password user_models.Password) error
 	//Update(u *models.User) error
 	//Delete(id int) error
 }

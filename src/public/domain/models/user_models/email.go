@@ -60,3 +60,8 @@ func NewEmail(email string) (Email, error) {
 	}
 	return Email(email), nil
 }
+
+func (e Email) UserName() string {
+	emails := strings.Split(string(e), "@")
+	return emails[0]
+}

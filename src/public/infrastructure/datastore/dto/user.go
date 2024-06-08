@@ -19,30 +19,64 @@ type UserAuth struct {
 	PasswordSalt string `json:"password_salt"`
 }
 
-func EntityUserToOrmUser(entity *user_models.User) (*User, error) {
+func ToOrmUser(entity *user_models.User) (*User, error) {
 	newUser := &User{
-		UserName: entity.UserName,
-		Email:    entity.Email,
-		Image:    entity.Image,
+		UserName: string(entity.UserName),
+		Email:    string(entity.Email),
+		Image:    string(entity.Image),
 		UserAuth: UserAuth{
-			PasswordHash: entity.PasswordHash,
-			PasswordSalt: entity.PasswordSalt,
+			PasswordHash: string(entity.PasswordHash),
+			PasswordSalt: string(entity.PasswordSalt),
 		},
 	}
 
 	return newUser, nil
 }
 
-func OrmUserToEntityUser(newUser *User) (*user_models.User, error) {
-
-	original := &user_models.User{
-		ID:           newUser.ID,
-		UserName:     newUser.UserName,
-		Email:        newUser.Email,
-		Image:        newUser.Image,
-		PasswordHash: newUser.UserAuth.PasswordHash,
-		PasswordSalt: newUser.UserAuth.PasswordSalt,
+func ToEntityUser(newUser *User) (*user_models.User, error) {
+	entityUser := user_models.User{
+		ID: newUser.ID,
 	}
 
-	return original, nil
+	if newUser.Email != "" {
+		email, err := user_models.NewEmail(newUser.Email)
+		if err != nil {
+			return nil, err
+		}
+		entityUser.Email = email
+	}
+
+	if newUser.UserName != "" {
+		name, err := user_models.NewUserName(newUser.UserName)
+		if err != nil {
+			return nil, err
+		}
+		entityUser.UserName = name
+	}
+
+	if newUser.Image != "" {
+		image, err := user_models.NewImage(newUser.Image)
+		if err != nil {
+			return nil, err
+		}
+		entityUser.Image = image
+	}
+
+	if newUser.UserAuth.PasswordSalt != "" {
+		passwordSalt, err := user_models.NewPasswordSalt(newUser.UserAuth.PasswordSalt)
+		if err != nil {
+			return nil, err
+		}
+		entityUser.PasswordSalt = passwordSalt
+	}
+
+	if newUser.UserAuth.PasswordHash != "" {
+		passwordHash, err := user_models.NewPasswordHash(newUser.UserAuth.PasswordHash)
+		if err != nil {
+			return nil, err
+		}
+		entityUser.PasswordHash = passwordHash
+	}
+
+	return &entityUser, nil
 }

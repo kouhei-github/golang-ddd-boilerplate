@@ -32,7 +32,7 @@ func (lu LoginUseCase) Execute(email, password string) (*LoginResponse, error) {
 	if err != nil {
 		return nil, err
 	}
-	passwordVo, err := user_models.NewPassword(&password)
+	passwordVo, err := user_models.NewPassword(password)
 	if err != nil {
 		return nil, err
 	}
@@ -46,18 +46,17 @@ func (lu LoginUseCase) Execute(email, password string) (*LoginResponse, error) {
 	if err != nil {
 		return nil, err
 	}
-
 	if !authUser.CheckPassword(string(passwordVo)) {
 		return nil, errors.New("パスワードが一致しません。")
 	}
 
 	// Create token
-	accessToken, err := lu.jte.GenerateToken(AccessTokenExpires, user.ID.(int), user.UserName, user.Email)
+	accessToken, err := lu.jte.GenerateToken(AccessTokenExpires, user.ID.(int), string(user.UserName), string(user.Email))
 	if err != nil {
 		return nil, err
 	}
 
-	refreshToken, err := lu.jte.GenerateToken(RefreshTokenExpires, user.ID.(int), user.UserName, user.Email)
+	refreshToken, err := lu.jte.GenerateToken(RefreshTokenExpires, user.ID.(int), string(user.UserName), string(user.Email))
 	if err != nil {
 		return nil, err
 	}
@@ -67,7 +66,7 @@ func (lu LoginUseCase) Execute(email, password string) (*LoginResponse, error) {
 		Token:              accessToken,
 		AccessTokenExpires: int(AccessTokenExpires.Seconds()),
 		RefreshToken:       refreshToken,
-		AvatarURL:          user.Image,
+		AvatarURL:          string(user.Image),
 	}, nil
 
 }

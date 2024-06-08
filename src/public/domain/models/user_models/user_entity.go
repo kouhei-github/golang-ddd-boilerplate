@@ -1,75 +1,73 @@
 package user_models
 
 import (
-	"crypto/rand"
 	"encoding/base64"
 	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
+	"math/rand"
 	"os"
 )
 
 type User struct {
 	ID           interface{}
-	UserName     string
-	Email        string
-	Password     string
-	Image        string
-	PasswordHash string
-	PasswordSalt string
+	UserName     UserName
+	Email        Email
+	Password     Password
+	Image        Image
+	PasswordHash PasswordHash
+	PasswordSalt PasswordSalt
 }
 
 // NewUser は、制約に沿った値を持つ仮登録状態のユーザを作成する。
 func NewUser(
 	email Email,
 	password Password,
-	userName UserName,
-	image Image,
-	passwordHash PasswordHash,
-	passwordSalt PasswordSalt,
+	userName *UserName,
+	image *Image,
+	passwordHash *PasswordHash,
+	passwordSalt *PasswordSalt,
 ) (*User, error) {
 	// 識別子である userUUID を生成
 	userUUID, err := uuid.NewRandom()
 	if err != nil {
 		return nil, err
 	}
-	// ユーザ属性を作成
-	return &User{
-		ID:           userUUID,
-		UserName:     string(userName),
-		Email:        string(email),
-		Password:     string(password),
-		Image:        string(image),
-		PasswordHash: string(passwordHash),
-		PasswordSalt: string(passwordSalt),
-	}, nil
-}
 
-func (u *User) SetPassword(password string) {
-	saltLength := 16
-	salt, _ := u.generateSalt(saltLength)
-	u.PasswordSalt = salt
-	hash, _ := u.hashPassword(password, []byte(salt))
-	u.PasswordHash = hash
-}
-
-func (u *User) hashPassword(password string, salt []byte) (string, error) {
-	pepper := []byte(os.Getenv("PASS_PEPPER"))
-	hashedBytes, err := bcrypt.GenerateFromPassword(append(append([]byte(password), salt...), pepper...), bcrypt.DefaultCost)
-	if err != nil {
-		return "", err
+	user := User{
+		ID:       userUUID,
+		Email:    email,
+		Password: password,
 	}
 
-	return string(hashedBytes), nil
+	if userName != nil {
+		user.UserName = *userName
+	}
+	if image != nil {
+		user.Image = *image
+	}
+	if passwordHash != nil {
+		user.PasswordHash = *passwordHash
+	}
+	if passwordSalt != nil {
+		user.PasswordSalt = *passwordSalt
+	}
+
+	// ユーザ属性を作成
+	return &user, nil
+}
+
+func (u *User) GenerateSaltPassword() {
+	saltLength := 16
+	salt, _ := u.generateSalt(saltLength)
+	newSalt, _ := NewPasswordSalt(salt)
+	u.PasswordSalt = newSalt
+	hash, _ := u.Password.HashPassword([]byte(salt))
+	newHash, _ := NewPasswordHash(hash)
+	u.PasswordHash = newHash
 }
 
 func (u *User) CheckPassword(password string) bool {
-	return u.comparePasswords(u.PasswordHash, password, []byte(u.PasswordSalt))
-}
-
-func (u *User) comparePasswords(hashedPassword, password string, salt []byte) bool {
-	pepper := []byte(os.Getenv("PASS_PEPPER"))
-	err := bcrypt.CompareHashAndPassword([]byte(hashedPassword), append(append([]byte(password), salt...), pepper...))
-	return err == nil
+	return u.ComparePasswords(string(u.PasswordHash), password, []byte(u.PasswordSalt))
 }
 
 func (u *User) generateSalt(length int) (string, error) {
@@ -81,4 +79,10 @@ func (u *User) generateSalt(length int) (string, error) {
 
 	salt := base64.URLEncoding.EncodeToString(saltBytes)
 	return salt, nil
+}
+
+func (p *User) ComparePasswords(hashedPassword, password string, salt []byte) bool {
+	pepper := []byte(os.Getenv("PASS_PEPPER"))
+	err := bcrypt.CompareHashAndPassword([]byte(hashedPassword), append(append([]byte(password), salt...), pepper...))
+	return err == nil
 }

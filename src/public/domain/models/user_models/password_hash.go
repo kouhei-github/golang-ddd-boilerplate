@@ -4,14 +4,11 @@ import "errors"
 
 type PasswordHash string
 
-func NewPasswordHash(passwordHash *string) (PasswordHash, error) {
-	if passwordHash == nil {
-		return "", nil
-	}
+func NewPasswordHash(passwordHash string) (PasswordHash, error) {
 
-	if *passwordHash == "" {
+	if passwordHash == "" {
 		return "", errors.New("ユーザー画像を正しく入力してください")
 	}
 
-	return PasswordHash(*passwordHash), nil
+	return PasswordHash(passwordHash), nil
 }

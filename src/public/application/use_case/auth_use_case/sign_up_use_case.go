@@ -18,10 +18,11 @@ func NewSignUpUseCase(
 
 func (su SignUpUseCase) Execute(email, password string) error {
 	emailVo, err := user_models.NewEmail(email)
+
 	if err != nil {
 		return err
 	}
-	passwordVo, err := user_models.NewPassword(&password)
+	passwordVo, err := user_models.NewPassword(password)
 	if err != nil {
 		return err
 	}
@@ -34,12 +35,12 @@ func (su SignUpUseCase) Execute(email, password string) error {
 		return errors.New("ユーザは既に存在します。")
 	}
 
-	newUser, err := user_models.NewUser(emailVo, passwordVo, "", "", "", "")
+	newUser, err := user_models.NewUser(emailVo, passwordVo, nil, nil, nil, nil)
 	if err != nil {
 		return err
 	}
 
-	newUser.SetPassword(newUser.Password)
+	newUser.GenerateSaltPassword()
 
 	if err := su.ur.Create(newUser); err != nil {
 		return err

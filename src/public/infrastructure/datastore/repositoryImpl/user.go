@@ -28,7 +28,7 @@ func (u *user) GetByID(id int) (*user_models.User, error) {
 	if user.ID != id {
 		return nil, errors.New("not found")
 	}
-	entityUser, err := dto.OrmUserToEntityUser(&user)
+	entityUser, err := dto.ToEntityUser(&user)
 	if err != nil {
 		return nil, errors.New("not found")
 	}
@@ -42,7 +42,7 @@ func (u *user) GetByEmail(email string) (*user_models.User, error) {
 		return nil, err
 	}
 
-	entityUser, err := dto.OrmUserToEntityUser(&user)
+	entityUser, err := dto.ToEntityUser(&user)
 	if err != nil {
 		return nil, errors.New("not found")
 	}
@@ -56,7 +56,7 @@ func (u *user) GetUserAuthByID(id int) (*user_models.User, error) {
 		return nil, err
 	}
 
-	entityUser, err := dto.OrmUserToEntityUser(&user)
+	entityUser, err := dto.ToEntityUser(&user)
 	if err != nil {
 		return nil, errors.New("not found")
 	}
@@ -73,7 +73,7 @@ func (u *user) GetUserAuthByID(id int) (*user_models.User, error) {
 
 func (u *user) Create(entUser *user_models.User) error {
 	// entityからORMに変換
-	userOrm, err := dto.EntityUserToOrmUser(entUser)
+	userOrm, err := dto.ToOrmUser(entUser)
 	if err != nil {
 		return err
 	}

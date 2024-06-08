@@ -63,7 +63,7 @@ func (ru RefreshTokenUseCase) Execute(refreshToken string) (*Response, error) {
 		Token:              accessToken,
 		AccessTokenExpires: int(AccessTokenExpires.Seconds()),
 		RefreshToken:       refreshToken,
-		ImageURL:           user.Image,
+		ImageURL:           string(user.Image),
 	}
 
 	return &res, err

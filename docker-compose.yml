@@ -1,8 +1,8 @@
 version: '3.8'
 services:
   go:
-    image: dx-sponsor-sales-image
-    container_name: dx-sponsor-sales-container
+    image: golang-ddd-boilerplate-image
+    container_name: golang-ddd-boilerplate-container
     build:
       context: .
       dockerfile: container/golang/Dockerfile
@@ -25,7 +25,7 @@ services:
 
   db:
     image: mysql:8
-    container_name: dx-sponsor-sales-db # phpMyAdminサービスのPMA_HOSTSに設定する
+    container_name: golang-ddd-boilerplate-db # phpMyAdminサービスのPMA_HOSTSに設定する
     environment:
       MYSQL_ROOT_PASSWORD: ${DB_ROOT}
       MYSQL_DATABASE: ${DB_NAME}
@@ -53,11 +53,11 @@ services:
 
   # phpMyAdmin
   phpmyadmin:
-    container_name: dx-sponsor-sales-phpmyadmin
+    container_name: golang-ddd-boilerplate-phpmyadmin
     image: phpmyadmin/phpmyadmin
     environment:
       - PMA_ARBITRARY=1
-      - PMA_HOSTS=dx-sponsor-sales-db
+      - PMA_HOSTS=golang-ddd-boilerplate-db
       - PMA_USER=root
       - PMA_PASSWORD=${DB_ROOT}
     ports:

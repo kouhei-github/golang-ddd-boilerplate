@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/golang-jwt/jwt"
-	"github.com/kouhei-github/golang-ddd-boboilerplate/application/use_case/external"
+	"github.com/kouhei-github/golang-ddd-boboilerplate/domain/interface/external"
 	"os"
 	"time"
 )

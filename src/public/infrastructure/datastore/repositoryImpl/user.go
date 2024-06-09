@@ -2,8 +2,8 @@ package repositories
 
 import (
 	"errors"
+	"github.com/kouhei-github/golang-ddd-boboilerplate/domain/interface/repositories"
 	"github.com/kouhei-github/golang-ddd-boboilerplate/domain/models/user_models"
-	"github.com/kouhei-github/golang-ddd-boboilerplate/domain/repositories"
 	"github.com/kouhei-github/golang-ddd-boboilerplate/infrastructure/datastore/dto"
 
 	"gorm.io/gorm"

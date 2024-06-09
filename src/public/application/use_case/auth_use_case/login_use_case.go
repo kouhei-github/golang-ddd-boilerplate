@@ -2,9 +2,9 @@ package auth_use_case
 
 import (
 	"errors"
-	"github.com/kouhei-github/golang-ddd-boboilerplate/application/use_case/external"
+	"github.com/kouhei-github/golang-ddd-boboilerplate/domain/interface/external"
+	"github.com/kouhei-github/golang-ddd-boboilerplate/domain/interface/repositories"
 	"github.com/kouhei-github/golang-ddd-boboilerplate/domain/models/user_models"
-	"github.com/kouhei-github/golang-ddd-boboilerplate/domain/repositories"
 )
 
 type LoginUseCase struct {

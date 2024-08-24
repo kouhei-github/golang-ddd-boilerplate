@@ -2,6 +2,7 @@ package auth_use_case
 
 import (
 	"errors"
+	"github.com/kouhei-github/golang-ddd-boboilerplate/application/use_case/impluments/auth_use_case_imp"
 	"github.com/kouhei-github/golang-ddd-boboilerplate/domain/interface/external"
 	"github.com/kouhei-github/golang-ddd-boboilerplate/domain/interface/repositories"
 	"github.com/kouhei-github/golang-ddd-boboilerplate/domain/models/user_models"
@@ -19,15 +20,7 @@ func NewLoginUseCase(
 	return LoginUseCase{ur: userRepo, jte: jte}
 }
 
-type LoginResponse struct {
-	UserId             int    `json:"user_id"`
-	Token              string `json:"access_token"`
-	AccessTokenExpires int    `json:"access_token_expires"`
-	RefreshToken       string `json:"refresh_token"`
-	AvatarURL          string `json:"avatar_url"`
-}
-
-func (lu LoginUseCase) Execute(email, password string) (*LoginResponse, error) {
+func (lu LoginUseCase) Execute(email, password string) (*auth_use_case_imp.LoginResponse, error) {
 	emailVo, err := user_models.NewEmail(email)
 	if err != nil {
 		return nil, err
@@ -61,7 +54,7 @@ func (lu LoginUseCase) Execute(email, password string) (*LoginResponse, error) {
 		return nil, err
 	}
 
-	return &LoginResponse{
+	return &auth_use_case_imp.LoginResponse{
 		UserId:             user.ID,
 		Token:              accessToken,
 		AccessTokenExpires: int(AccessTokenExpires.Seconds()),

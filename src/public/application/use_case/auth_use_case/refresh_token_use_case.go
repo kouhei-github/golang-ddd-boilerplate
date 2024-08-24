@@ -1,6 +1,7 @@
 package auth_use_case
 
 import (
+	"github.com/kouhei-github/golang-ddd-boboilerplate/application/use_case/impluments/auth_use_case_imp"
 	"github.com/kouhei-github/golang-ddd-boboilerplate/domain/interface/external"
 	"github.com/kouhei-github/golang-ddd-boboilerplate/domain/interface/repositories"
 	"os"
@@ -27,15 +28,7 @@ var (
 	AccessTokenExpires  = 20 * unit
 )
 
-type Response struct {
-	UserId             int    `json:"user_id"`
-	Token              string `json:"access_token"`
-	AccessTokenExpires int    `json:"access_token_expires"`
-	RefreshToken       string `json:"refreshToken"`
-	ImageURL           string `json:"image_url"`
-}
-
-func (ru RefreshTokenUseCase) Execute(refreshToken string) (*Response, error) {
+func (ru RefreshTokenUseCase) Execute(refreshToken string) (*auth_use_case_imp.Response, error) {
 	userId, name, email, err := ru.jte.GetClaimFromToken(refreshToken, string(JWT_SECRET_KEY))
 
 	if err != nil {
@@ -58,7 +51,7 @@ func (ru RefreshTokenUseCase) Execute(refreshToken string) (*Response, error) {
 		return nil, err
 	}
 
-	res := Response{
+	res := auth_use_case_imp.Response{
 		UserId:             user.ID,
 		Token:              accessToken,
 		AccessTokenExpires: int(AccessTokenExpires.Seconds()),

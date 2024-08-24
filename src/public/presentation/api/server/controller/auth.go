@@ -3,20 +3,20 @@ package handlers
 import (
 	"fmt"
 	"github.com/gofiber/fiber/v2"
-	"github.com/kouhei-github/golang-ddd-boboilerplate/application/use_case/auth_use_case"
+	"github.com/kouhei-github/golang-ddd-boboilerplate/application/use_case/impluments/auth_use_case_imp"
 	"github.com/kouhei-github/golang-ddd-boboilerplate/presentation/api/server/router"
 )
 
 type authHandler struct {
-	su auth_use_case.SignUpUseCase
-	ru auth_use_case.RefreshTokenUseCase
-	lu auth_use_case.LoginUseCase
+	su auth_use_case_imp.ISignUpUseCase
+	ru auth_use_case_imp.IRefreshTokenUseCase
+	lu auth_use_case_imp.ILoginUseCase
 }
 
 func NewAuthHandler(
-	su auth_use_case.SignUpUseCase,
-	ru auth_use_case.RefreshTokenUseCase,
-	lu auth_use_case.LoginUseCase,
+	su auth_use_case_imp.ISignUpUseCase,
+	ru auth_use_case_imp.IRefreshTokenUseCase,
+	lu auth_use_case_imp.ILoginUseCase,
 ) router.AuthHandler {
 	return authHandler{su, ru, lu}
 }
